@@ -1,0 +1,7 @@
+{
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
+    ],
+    "python.pythonPath": "e:\\python\\code\\jwt_sqllite3\\env\\Scripts\\python.exe"
+}

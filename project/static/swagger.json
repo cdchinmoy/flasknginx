@@ -1,0 +1,261 @@
+swagger: '2.0'
+info:
+  description: This is an API developed to test some CRUD operation based on multi user register and login, authenticated with JWT.
+  version: 1.0.0
+  title: CRUD Flask API
+  # put the contact info for your development or API team
+  contact:
+    email: cdchinmoy@gmail.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: user authentication
+  description: user authentication and product listing
+- name: seller authentication
+  description: seller authentication and product CRUD operations
+
+paths:
+  /user/register:
+    post:
+      tags:
+      - user authentication
+      summary: adds an user object
+      operationId: addUser
+      description: Registers a user to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: registration
+        description: User to be logged in
+        required: true
+        schema:
+          $ref: '#/definitions/Registration'
+      responses:
+        201:
+          description: user created and a json object returned with created user
+        200:
+          description: an error occured, a json object is returned with an "error" field with an error message
+
+  /user/login:
+    post:
+      tags:
+      - user authentication
+      summary: log user into the system
+      operationId: userLogin
+      description: Allows a legitimate user access privileged info
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: login
+        description: User to be logged in
+        required: true
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: With json object that has "success" and "token" attributes signify a successful login request. With json object that has "error" attribute signifies a failed login request
+
+  /user/products:
+    get:
+      tags:
+      - user authentication
+      summary: get all the product lists
+      operationId: getProductLists
+      description: Gets all the product lists
+      produces:
+      - application/json
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          description: token to verify user authentication
+      responses:
+        200:
+          description: successful retrieval of list objects
+        401:
+          description: you are not authorized to see the lists, you need to log in
+
+  /seller/register:
+    post:
+      tags:
+      - seller authentication
+      summary: adds an seller object
+      operationId: addSeller
+      description: Registers a seller to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: registration
+        description: Seller to be logged in
+        required: true
+        schema:
+          $ref: '#/definitions/Registration'
+      responses:
+        201:
+          description: seller created and a json object returned with created seller
+        200:
+          description: an error occured, a json object is returned with an "error" field with an error message
+
+
+  /seller/login:
+    post:
+      tags:
+      - seller authentication
+      summary: log seller into the system
+      operationId: sellerLogin
+      description: Allows a legitimate seller access privileged info
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: login
+        description: Seller to be logged in
+        required: true
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: With json object that has "success" and "token" attributes signify a successful login request. With json object that has "error" attribute signifies a failed login request
+
+
+  /seller/product/add:
+    post:
+      tags:
+      - seller authentication
+      summary: adds an seller object
+      operationId: addProduct
+      description: Adding Product
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: token
+        schema:
+          type: string
+        description: token to verify user authentication
+      - in: body
+        name: Add Product
+        description: Seller to be add product
+        required: true
+        schema:
+          $ref: '#/definitions/ProductAdd'
+      responses:
+        201:
+          description: seller created and a json object returned with created seller
+        200:
+          description: an error occured, a json object is returned with an "error" field with an error message
+
+
+  /seller/product/map:
+    post:
+      tags:
+      - seller authentication
+      summary: map a product to seller
+      operationId: mapProduct
+      description: Mapping Product
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: token
+        schema:
+          type: string
+        description: token to verify user authentication
+      - in: body
+        name: Map Product
+        description: Seller to map a product
+        required: true
+        schema:
+          $ref: '#/definitions/ProductMap'
+      responses:
+        201:
+          description: seller created and a json object returned with created seller
+        200:
+          description: an error occured, a json object is returned with an "error" field with an error message
+
+
+definitions:
+  Registration:
+    type: object
+    required:
+    - name
+    - username
+    - email
+    - password
+    properties:
+      name:
+        type: string
+        example: vince112
+      username:
+        type: string
+        example: vince112
+      email:
+        type: string
+        example: vince112@test.com
+      password:
+        type: string
+        example: my-really-really-strong-passsword
+  Login:
+    type: object
+    required:
+    - username
+    - password
+    properties:
+      username:
+        type: string
+        example: vince112
+      password:
+        type: string
+        example: my-really-really-strong-passsword
+
+  ProductAdd:
+    type: object
+    required:
+    - product_name
+    - product_price
+    - product_desc
+    properties:
+      product_name:
+        type: string
+        example: sample product name
+      product_price:
+        type: string
+        example: 100
+      product_desc:
+        type: string
+        example: This is a sample product description
+
+  ProductMap:
+    type: object
+    required:
+    - product_id
+    properties:
+      product_id:
+        type: integer
+        example: 1
+
+
+# Added by API Auto Mocking Plugin
+host: ec2-3-6-38-120.ap-south-1.compute.amazonaws.com:5000
+schemes:
+ - https
